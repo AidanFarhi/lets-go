@@ -41,4 +41,27 @@ func main() {
 		fmt.Println(growingSlice, len(growingSlice), cap(growingSlice))
 		growingSlice = append(growingSlice, i)
 	}
+
+	originSlice := []int{1, 2, 3, 4, 5}
+	childSliceOne := originSlice[:3]
+	childSliceTwo := originSlice[1:4]
+	fmt.Println(originSlice, childSliceOne, childSliceTwo)
+	childSliceTwo[0] = 999
+	fmt.Println(originSlice)
+
+	sliceX := make([]int, 0, 5)
+	sliceX = append(sliceX, 1, 2, 3, 4)
+	sliceY := sliceX[:2]
+	sliceZ := sliceX[2:]
+	fmt.Println(sliceY)
+	fmt.Println(sliceZ)
+	fmt.Println(cap(sliceX), cap(sliceY), cap(sliceZ))
+	sliceY = append(sliceY, 30, 40, 50)
+	sliceX = append(sliceX, 60)
+	fmt.Println(cap(sliceX))
+	fmt.Println(cap(sliceZ))
+	sliceZ = append(sliceZ, 70)
+	fmt.Println("x:", sliceX)
+	fmt.Println("y:", sliceY)
+	fmt.Println("z:", sliceZ)
 }
