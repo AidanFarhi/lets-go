@@ -64,4 +64,11 @@ func main() {
 	fmt.Println("x:", sliceX)
 	fmt.Println("y:", sliceY)
 	fmt.Println("z:", sliceZ)
+
+	// using copy
+	copySlice := []int{1, 2, 3}
+	copySlice2 := make([]int, 3)
+	numElementsCopied := copy(copySlice2, copySlice)
+	fmt.Println(copySlice2, numElementsCopied)
+
 }
