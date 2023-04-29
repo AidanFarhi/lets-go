@@ -71,4 +71,20 @@ func main() {
 	numElementsCopied := copy(copySlice2, copySlice)
 	fmt.Println(copySlice2, numElementsCopied)
 
+	sliceToCopy := []int{5, 6, 7, 8}
+	arrToCopy := [...]int{1, 2, 3, 4}
+	theNewSlice := make([]int, 2)
+	copy(theNewSlice, arrToCopy[:])
+	copy(arrToCopy[:], sliceToCopy)
+	fmt.Println(sliceToCopy)
+	fmt.Println(arrToCopy)
+	fmt.Println(theNewSlice)
+
+	// fun with strings
+	s := "hello world"
+	ch := s[3]
+	fmt.Println(s, ch)
+
+	// maps
+
 }
