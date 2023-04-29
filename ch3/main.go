@@ -86,5 +86,15 @@ func main() {
 	fmt.Println(s, ch)
 
 	// maps
-
+	var nilMap map[string]int
+	fmt.Println(nilMap, len(nilMap))
+	totalWins := map[string]int{}
+	totalWins["blue"] = 2
+	totalWins["red"] = 3
+	fmt.Println(totalWins)
+	teams := map[string][]string{
+		"Orcas": {"Fred", "Joe", "Jim"},
+		"Lions": {"Jim", "Bob", "Harry"},
+	}
+	fmt.Println(teams)
 }
