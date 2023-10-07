@@ -5,7 +5,7 @@ fmt:
 .PHONY:fmt
 
 lint: fmt
-	golint ./...
+	staticcheck ./...
 .PHONY:lint
 
 vet: fmt
