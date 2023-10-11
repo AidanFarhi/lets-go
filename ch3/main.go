@@ -31,6 +31,71 @@ func main() {
 
 	/*
 		- Slices -
+
+		A data structure that holds a sequence of values.
+
+		  - Capacity
+
+		  Every slice has a capacity, which is the number of
+		  consecutive memory locations reserved. Once the capacity
+		  is met, the Go runtime will allocate a new slice with a
+		  larger capacity.
 	*/
 	fmt.Println("----------- Slices -----------")
+	var mySlice = []int{10, 20, 30}
+	var myOtherSlice = []int{11, 22, 33}
+	var nilSlice []int
+	mySlice = append(mySlice, 40, 50)
+	myOtherSlice = append(myOtherSlice, mySlice...)
+	fmt.Println(mySlice)
+	fmt.Println(mySlice[2])
+	fmt.Println(nilSlice)
+	fmt.Println(nilSlice == nil)
+	fmt.Println(len(mySlice))
+	fmt.Println(mySlice)
+	fmt.Println(myOtherSlice)
+
+	// Capacity
+	capSlice := []int{}
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 10)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 20)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 30)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 40)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 50)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+	capSlice = append(capSlice, 60)
+	fmt.Println(capSlice, len(capSlice), cap(capSlice))
+
+	// make
+	makeSlice := make([]int, 5) // specifying capacity
+	makeSlice = append(makeSlice, 100)
+	otherMakeSlice := make([]int, 0, 10) // specifying length and capacity
+	otherMakeSlice = append(otherMakeSlice, 99)
+	fmt.Println(makeSlice)
+	fmt.Println(otherMakeSlice)
+
+	// slicing slices
+	daSlice := []int{1, 2, 3, 4, 5}
+	daSlice2 := daSlice[:2]
+	daSlice3 := daSlice[1:]
+	daSlice4 := daSlice[1:3]
+	daSlice5 := daSlice[:]
+	fmt.Println(daSlice)
+	fmt.Println(daSlice2)
+	fmt.Println(daSlice3)
+	fmt.Println(daSlice4)
+	fmt.Println(daSlice5)
+
+	// slices share memory
+	parentSlice := []int{100, 200, 300, 400}
+	childSlice := parentSlice[:2]
+	childSlice[1] = 99
+	parentSlice[0] = 11
+	fmt.Println(parentSlice)
+	fmt.Println(childSlice)
 }
