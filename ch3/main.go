@@ -98,4 +98,132 @@ func main() {
 	parentSlice[0] = 11
 	fmt.Println(parentSlice)
 	fmt.Println(childSlice)
+
+	// wierd slice behavior
+	x := make([]int, 0, 5)
+	x = append(x, 1, 2, 3, 4)
+	y := x[:2]
+	z := x[2:]
+	fmt.Println(cap(x), cap(y), cap(z))
+	y = append(y, 30, 40, 50)
+	x = append(x, 60)
+	z = append(z, 70)
+	fmt.Println("x:", x)
+	fmt.Println("y:", y)
+	fmt.Println("z:", z)
+
+	// using copy()
+	xForCopy := []int{1, 2, 3, 4}
+	yForCopy := make([]int, 4)
+	num := copy(yForCopy, xForCopy)
+	fmt.Println(yForCopy, num)
+
+	/*
+		- Strings, Runes, and Bytes -
+	*/
+	var s string = "hello"
+	var b byte = s[0]
+	fmt.Println(b)
+
+	var r rune = 'x'
+	var s2 string = string(r)
+	var b2 byte = 'y'
+	var s3 string = string(b)
+	fmt.Println(s2, b2, s3)
+
+	/*
+		- Maps -
+	*/
+	var nilMap map[string]int
+	fmt.Println(nilMap)
+
+	totalWins := map[string]int{}
+	totalWins["usa"] = 2
+	totalWins["france"] = 5
+	fmt.Println(totalWins)
+	fmt.Println(totalWins["france"])
+
+	teams := map[string][]string{
+		"Orcas":   {"Fred", "Ralph", "Bijou"},
+		"Lions":   {"Sarah", "Peter", "Billie"},
+		"Kittens": {"Waldo", "Raul", "Ze"},
+	}
+	fmt.Println(teams)
+
+	// comma - ok idiom
+	m := map[string]int{
+		"a": 5,
+		"b": 3,
+	}
+	v, ok := m["a"]
+	fmt.Println(v, ok)
+	v, ok = m["c"]
+	fmt.Println(v, ok)
+
+	// deleting from maps
+	delete(m, "a")
+	fmt.Println(m)
+
+	/*
+		- Sets (just use a map)
+	*/
+	intSet := map[int]bool{}
+	vals := []int{5, 10, 2, 5, 8, 7, 3, 9, 1, 2, 10}
+	for _, v := range vals {
+		intSet[v] = true
+	}
+	fmt.Println(len(vals), len(intSet))
+	fmt.Println(intSet[5])
+	fmt.Println(intSet[500])
+	if intSet[100] {
+		fmt.Println("100 is in the set")
+	}
+
+	/*
+		- Structs -
+	*/
+	type person struct {
+		name string
+		age  int
+		pet  string
+	}
+
+	var fred person
+	fmt.Println(fred)
+
+	bob := person{
+		"bob",
+		20,
+		"sparky",
+	}
+	fmt.Println(bob)
+
+	jim := person{
+		age:  54,
+		name: "jim",
+		pet:  "fluffy",
+	}
+	fmt.Println(jim)
+	jim.age = 99
+	fmt.Println(jim.age)
+
+	// anonymous structs
+	var guy struct {
+		name string
+		age  int
+		job  string
+	}
+	guy.name = "fred"
+	guy.age = 89
+	guy.job = "CEO"
+	fmt.Println(guy)
+
+	pet := struct {
+		name string
+		kind string
+	}{
+		name: "spike",
+		kind: "dog",
+	}
+	fmt.Println(pet)
 }
