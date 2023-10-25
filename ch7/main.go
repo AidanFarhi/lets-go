@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
 func main() {
@@ -60,4 +62,38 @@ func main() {
 		L: LogicProvider{},
 	}
 	c.Program()
+
+	// using empty interfaces
+	var i interface{}
+	i = 20
+	i = "hello"
+	i = struct {
+		FirstName string
+		LastName  string
+	}{"Bob", "Johnson"}
+	fmt.Println(i)
+
+	// using interfaces to read JSON with unknown schema
+	data := map[string]interface{}{}
+	contents, err := os.ReadFile("test_data.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.Unmarshal(contents, &data)
+	fmt.Println(data)
+
+	// type assertions
+	type MyInt int
+	var value interface{}
+	var myValue MyInt = 20
+	value = myValue
+	value2 := value.(MyInt)
+	fmt.Println(value2 + 100)
+
+	value3, ok := value.(string)
+	if !ok {
+		err := fmt.Errorf("unexpected type for %v", value)
+		fmt.Println(err)
+	}
+	fmt.Println(value3)
 }
