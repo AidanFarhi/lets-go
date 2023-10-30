@@ -23,6 +23,12 @@ func updateInt(intPointer *int) {
 	*intPointer = 99
 }
 
+func addToSlice(slice []int) {
+	numsToAdd := []int{1, 2, 3, 4, 5, 6}
+	slice = append(slice, numsToAdd...)
+	fmt.Println(slice)
+}
+
 func main() {
 	/*
 		- Pointers -
@@ -66,4 +72,9 @@ func main() {
 	fmt.Println(p1)
 	changePerson(&p1)
 	fmt.Println(p1)
+
+	// fun with slices
+	originalSlice := []int{11, 22, 33}
+	addToSlice(originalSlice)
+	fmt.Println(originalSlice)
 }
