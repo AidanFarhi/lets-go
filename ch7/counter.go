@@ -16,5 +16,5 @@ func (c *Counter) Increment() {
 }
 
 func (c Counter) String() string {
-	return fmt.Sprintf("total: %d, last updated: %v", c.total, c.lastUpdated)
+	return fmt.Sprintf("total: %d, last updated %v", c.total, c.lastUpdated)
 }
