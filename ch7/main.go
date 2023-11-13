@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 func updateCounterWrong(c Counter) {
 	// this is invoking Increment() on a copy of the original object
@@ -113,4 +117,38 @@ func main() {
 	}
 	client.Program()
 	client2.Program()
+
+	// an empty interface indicates an optional value
+	// or a variable that could store any type
+	var myInterface interface{}
+	myInterface = 20
+	myInterface = "hello"
+	myInterface = struct {
+		FirstName string
+		LastName  string
+	}{"Fred", "Fredson"}
+	fmt.Println(myInterface)
+
+	// reading data using an empty interface
+	data := map[string]interface{}{}
+	contents, err := os.ReadFile("test_data.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.Unmarshal(contents, &data)
+	fmt.Println(data)
+
+	// type assertions
+	type MyInt int
+	var myInterface2 interface{}
+	var myInt MyInt = 20
+	myInterface2 = myInt
+	myInt2 := myInterface2.(MyInt)
+	fmt.Println(myInt2 + 10)
+	myString, ok := myInterface2.(string)
+	if !ok {
+		fmt.Println(fmt.Errorf("unexpected type for %v", myInterface2))
+	} else {
+		fmt.Println(myString)
+	}
 }
