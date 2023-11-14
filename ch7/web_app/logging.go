@@ -6,7 +6,7 @@ type Logger interface {
 	Log(message string)
 }
 
-// A function type with a method on it
+// A function type with a method on it.
 type LoggerAdapter func(message string)
 
 func (lg LoggerAdapter) Log(message string) {

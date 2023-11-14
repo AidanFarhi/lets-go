@@ -19,6 +19,7 @@ func (c Controller) SayHello(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(message))
 }
 
+// factory function to generate a Controller
 func NewController(l Logger, logic Logic) Controller {
 	return Controller{
 		l:     l,
