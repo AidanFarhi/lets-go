@@ -102,5 +102,6 @@ func main() {
 	for _, mr := range matchResults {
 		league.AddMatchResult(mr)
 	}
+
 	RankPrinter(league, os.Stdout)
 }
