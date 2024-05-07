@@ -31,4 +31,8 @@ func main() {
 		return acc + val
 	})
 	fmt.Println(sum)
+	extendedLengths := util.Map(lengths, func(i int) int {
+		return i + 5
+	})
+	fmt.Println(extendedLengths)
 }
