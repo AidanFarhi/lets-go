@@ -1,0 +1,6 @@
+github.com/AidanFarhi/go-math v1.0.0 h1:851zJo85bmTxpqpdIHMcKFsp1djBkYQnU/ProbE0A88=
+github.com/AidanFarhi/go-math v1.0.0/go.mod h1:6KVNBda69ygydj40Ozl0LDxgF+zEZIvRcEllRY+5FII=
+github.com/AidanFarhi/go-math/v2 v2.0.1 h1:yeWV33tSS5zbJYLtLeHrxBW0qY9UrFLoywfqusy7ynQ=
+github.com/AidanFarhi/go-math/v2 v2.0.1/go.mod h1:BN+neZgpXASLzOGyVaCu7t4UoKLGbj00cHN27Smm6CY=
+golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=
+golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842/go.mod h1:XtvwrStGgqGPLc4cjQfWqZHG1YFdYs6swckp8vpsjnc=
