@@ -68,7 +68,6 @@ func main() {
 	fmt.Println(fnum1, fnum2)
 
 	// Complex numbers
-
 	var cNum = complex(20.3, 10.2)
 
 	fmt.Println(real(cNum), imag(cNum), cNum)
@@ -82,11 +81,44 @@ func main() {
 
 	fmt.Println(sum1, sum2)
 
+	// ---------------- Declaring Variables ----------------
+
+	// using a declaration list
+	var (
+		xInt int
+		yInt     = 20
+		zInt int = 30
+		d, e     = 40, "hello"
+		f, g string
+	)
+
+	fmt.Println(xInt, yInt, zInt, d, e, f, g)
+
 	// ---------------- Using const ----------------
+
+	// There are only a few values that constants can hold:
+	// - numeric literals
+	// - true and false
+	// - strings
+	// - runes
+	// - return values of complex(), real(), imag(), len(), and cap()
+	// - expressions that consist of operators and the preceding values
+
 	const cString = "hello"
 	const cVal = 10
 	// cString = "goodbye" this will not compile
 	// cVal = cVal + 1     this will not compile
 
-	fmt.Println(cString, cVal)
+	// the below will not compile
+	// type Person struct {
+	// 	name string
+	// }
+	// const myPerson = Person{}
+
+	const flexVal = 10
+	var fVal1 float32 = flexVal
+	var fVal2 byte = flexVal
+
+	fmt.Println(cString, cVal, fVal1, fVal2)
+
 }
