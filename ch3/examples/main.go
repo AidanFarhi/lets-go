@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"maps"
 	"slices"
 )
 
@@ -201,4 +202,156 @@ func main() {
 	xArrayPointer[0] = 88
 	fmt.Println(xArrayPointer)
 	fmt.Println(xSlice)
+
+	//---------- Strings, Runes, and Bytes -----------
+
+	// A string is a sequence of bytes. Go libraries assume
+	// that a string is UTF-8 encoded.
+	// A UTF-8 code point is 1-4 bytes long.
+
+	// you can index and get slices from strings
+	str := "hello there"
+	b := str[3]
+	strSlice := str[:3]
+
+	fmt.Println(b, strSlice)
+
+	// len() returns the length in bytes, not the
+	// number of UTF-8 code points.
+	fmt.Println(len(str))
+
+	// Runes and Bytes can be converted to strings.
+	r := 'x'
+	rStr := string(r)
+	bStr := 'y'
+	rStr2 := string(bStr)
+
+	fmt.Println(rStr, rStr2)
+
+	// Strings can be converted to slices of bytes or runes
+	byteSlice := []byte(str)
+	runeSlice := []rune(str)
+
+	fmt.Println(byteSlice)
+	fmt.Println(runeSlice)
+
+	//-------- Maps ----------
+	var nilMap map[string]int // nil map variable
+
+	fmt.Println(nilMap["one"])
+	fmt.Println(nilMap)
+	// nilMap["one"] = 1 this will cause a panic
+
+	totalWins := map[string]int{} // empty map literal
+
+	fmt.Println(totalWins["teamOne"])
+	fmt.Println(totalWins)
+
+	totalWins["Orcas"] = 1
+	totalWins["Lions"] = 2
+	totalWins["Kittens"]++
+
+	fmt.Println(totalWins)
+
+	teams := map[string][]string{
+		"Orcas":   []string{"Fred", "Ralph", "Bijou"},
+		"Lions":   []string{"Sarah", "Peter", "Billie"},
+		"Kittens": []string{"Waldo", "Raul", "Ze"},
+	}
+
+	fmt.Println(teams["Orcas"])
+
+	ages := make(map[string]int, 10)
+	ages["Bob"] = 22
+
+	fmt.Println(ages)
+
+	m := map[string]int{
+		"hello": 5,
+		"world": 0,
+		"food":  100,
+	}
+
+	v, ok := m["hello"]
+
+	fmt.Println(v, ok)
+
+	v, ok = m["world"]
+
+	fmt.Println(v, ok)
+
+	v, ok = m["goodbye"]
+
+	fmt.Println(v, ok)
+
+	delete(m, "hello")
+	v, ok = m["hello"]
+
+	fmt.Println(v, ok)
+
+	clear(m)
+	v, ok = m["food"]
+
+	fmt.Println(v, ok)
+	fmt.Println(len(m))
+
+	m1 := map[string]int{
+		"one": 1,
+		"two": 2,
+	}
+	m2 := map[string]int{
+		"two": 2,
+		"one": 1,
+	}
+
+	fmt.Println(maps.Equal(m1, m2))
+
+	// implementing a set using bool
+	intSet := map[int]bool{}
+	vals := []int{5, 10, 2, 5, 8, 7, 3, 9, 1, 2, 10}
+	for _, v := range vals {
+		intSet[v] = true
+	}
+
+	fmt.Println(len(vals), len(intSet))
+	fmt.Println(intSet[5])
+	fmt.Println(intSet[100])
+	if intSet[100] {
+		fmt.Println("100 is in the set")
+	}
+
+	// implementing a set using struct
+	stringSet := map[string]struct{}{}
+	strVals := []string{"a", "b", "a", "c", "d", "b", "a", "g"}
+	for _, v := range strVals {
+		stringSet[v] = struct{}{}
+	}
+
+	if _, ok := stringSet["a"]; ok {
+		fmt.Println("a is in the set")
+	}
+
+	//------------- Structs --------------
+	type person struct {
+		name string
+		age  int
+		pet  string
+	}
+
+	var fred person
+	bob := person{}
+	julia := person{
+		"Julia",
+		40,
+		"cat",
+	}
+	joe := person{
+		age:  54,
+		name: "joe",
+	}
+
+	fmt.Println(fred)
+	fmt.Println(bob)
+	fmt.Println(julia)
+	fmt.Println(joe)
 }
