@@ -354,4 +354,61 @@ func main() {
 	fmt.Println(bob)
 	fmt.Println(julia)
 	fmt.Println(joe)
+	fmt.Println(joe.name)
+
+	// Anonymous struct
+	pet := struct {
+		name string
+		kind string
+	}{
+		name: "Fido",
+		kind: "dog",
+	}
+
+	fmt.Println(pet.kind)
+
+	// struct type conversion compatibility
+
+	// compatible with: PersonB
+	type PersonA struct {
+		name string
+		age  int
+	}
+
+	// compatible with: PersonA
+	type PersonB struct {
+		name string
+		age  int
+	}
+
+	// not compatible with any: different order
+	type PersonC struct {
+		age  int
+		name string
+	}
+
+	// not compatible with any: different field names
+	type PersonD struct {
+		firstName string
+		age       int
+	}
+
+	// not compatible with any: extra field
+	type PersonE struct {
+		name string
+		age  int
+		pet  string
+	}
+
+	personA := PersonA{
+		name: "bob",
+		age:  40,
+	}
+
+	personB := PersonB{
+		name: "bob",
+		age:  40,
+	}
+
+	fmt.Println(personA == PersonA(personB))
 }
