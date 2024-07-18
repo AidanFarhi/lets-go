@@ -99,4 +99,41 @@ func main() {
 		}
 		fmt.Println(i)
 	}
+
+	// iterating over a map
+	m := map[string]int{
+		"a": 1,
+		"b": 3,
+		"c": 2,
+	}
+
+	for i := 0; i < 3; i++ {
+		fmt.Println("Loop", i)
+		for k, v := range m {
+			fmt.Println(k, v)
+		}
+	}
+
+	// iterating over strings
+	samples := []string{"hello", "apple_π!"}
+	for _, sample := range samples {
+		for i, r := range sample {
+			// if r is a multibyte rune, it will convert
+			// the UTF-8 representation into a single
+			// 32-bit number.
+			//
+			// The first variable (i) holds the number of bytes
+			// from the beginning of the string, but the type
+			// of the second variable (r) is rune.
+			fmt.Println(i, r, string(r))
+		}
+	}
+
+	// the for-range value is a copy
+	vals := []int{1, 2, 3, 4, 5}
+	for _, v := range vals {
+		v *= 2
+	}
+	fmt.Println(vals)
+
 }
