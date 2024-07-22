@@ -136,4 +136,88 @@ func main() {
 	}
 	fmt.Println(vals)
 
+	// labelling for statements
+outer:
+	for _, sample := range samples {
+		for i, r := range sample {
+			fmt.Println(i, r, string(r))
+			if r == 'l' {
+				continue outer
+			}
+		}
+		fmt.Println()
+	}
+
+	// switch
+	//
+	// cases in switch statements do not fall through
+	words := []string{"a", "cow", "smile", "gopher", "octopus", "anthropologist"}
+	for _, word := range words {
+		switch size := len(word); size {
+		case 1, 2, 3, 4:
+			fmt.Println(word, "is a short word!")
+		case 5:
+			wordLen := len(word) // this is only visible in the case 5 block
+			fmt.Println(word, "is exactly the right length:", wordLen)
+		case 6, 7, 8, 9:
+		default:
+			fmt.Println(word, "is a long word!")
+		}
+	}
+
+	// breaking out of a labelled loop using switch
+loop:
+	for i := 0; i < 10; i++ {
+		switch i {
+		case 0, 2, 4, 6:
+			fmt.Println(i, "is even")
+		case 3:
+			fmt.Println(i, "is divisible by 3 but not 2")
+		case 7:
+			fmt.Println("exit the loop!")
+			break loop
+		default:
+			fmt.Println(i, "is boring")
+		}
+	}
+
+	// blank switches
+	words = []string{"hi", "salutations", "hello"}
+	for _, word := range words {
+		switch wordLen := len(word); {
+		case wordLen < 5:
+			fmt.Println(word, "is a short word!")
+		case wordLen > 10:
+			fmt.Println(word, "is a long word!")
+		default:
+			fmt.Println(word, "is exactly the right length.")
+		}
+	}
+
+	// FizzBuzz using switch
+	for i := 1; i <= 10; i++ {
+		switch {
+		case i%3 == 0 && i%5 == 0:
+			fmt.Println("FizzBuzz")
+		case i%3 == 0:
+			fmt.Println("Fizz")
+		case i%5 == 0:
+			fmt.Println("Buzz")
+		default:
+			fmt.Println(i)
+		}
+	}
+
+	// the goto statement
+	a := rand.Intn(10)
+	for a < 100 {
+		if a%5 == 0 {
+			goto done
+		}
+		a = a*2 + 1
+	}
+	fmt.Println("do something when the loop completes normally")
+done:
+	fmt.Println("do complicated stuff no matter why we left the loop")
+	fmt.Println(a)
 }
