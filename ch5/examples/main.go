@@ -134,6 +134,31 @@ func DeferExample() int {
 	return a
 }
 
+// go is call by value
+type person struct {
+	age  int
+	name string
+}
+
+func FailedUpdate(i int, s string, p person) {
+	i = i * 2
+	s = "Goodbye"
+	p.name = "bob"
+}
+
+func ModMap(m map[int]string) {
+	m[2] = "hello"
+	m[3] = "goodbye"
+	delete(m, 1)
+}
+
+func ModSlice(s []int) {
+	for k, v := range s {
+		s[k] = v * 2
+	}
+	s = append(s, 10)
+}
+
 func main() {
 
 	result := Div(5, 2)
@@ -330,4 +355,22 @@ func main() {
 
 	// defer
 	DeferExample()
+
+	// go is call by value
+	p := person{}
+	i := 2
+	s := "Hello"
+	FailedUpdate(i, s, p)
+	fmt.Println(i, s, p)
+
+	m := map[int]string{
+		1: "first",
+		2: "second",
+	}
+	ModMap(m)
+	fmt.Println(m)
+
+	sNums := []int{1, 2, 3}
+	ModSlice(sNums)
+	fmt.Println(sNums)
 }
