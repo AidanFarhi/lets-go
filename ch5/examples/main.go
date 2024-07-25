@@ -119,6 +119,21 @@ func MultFuncGenerator(base int) MultFunc {
 	}
 }
 
+// defer
+func DeferExample() int {
+	a := 10
+	defer func(x int) {
+		fmt.Println("first:", x)
+	}(a)
+	a = 20
+	defer func(x int) {
+		fmt.Println("second:", x)
+	}(a)
+	a = 30
+	fmt.Println("exiting:", a)
+	return a
+}
+
 func main() {
 
 	result := Div(5, 2)
@@ -312,4 +327,7 @@ func main() {
 
 	fmt.Println(doubler(2))
 	fmt.Println(tripler(2))
+
+	// defer
+	DeferExample()
 }
