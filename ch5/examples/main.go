@@ -307,4 +307,9 @@ func main() {
 	})
 	fmt.Println("sorted by age:", people)
 
+	doubler := MultFuncGenerator(2)
+	tripler := MultFuncGenerator(3)
+
+	fmt.Println(doubler(2))
+	fmt.Println(tripler(2))
 }
