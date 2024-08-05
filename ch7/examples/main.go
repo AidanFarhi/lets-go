@@ -33,6 +33,16 @@ func (c *Counter) Increment() {
 	c.lastUpdated = time.Now()
 }
 
+func doUpdateWrong(c Counter) {
+	c.Increment()
+	fmt.Println("in doUpdateWrong:", c)
+}
+
+func doUpdateRight(c *Counter) {
+	c.Increment()
+	fmt.Println("in doUpdateRight:", c)
+}
+
 func (c Counter) String() string {
 	return fmt.Sprintf("total: %d, last updated: %v", c.total, c.lastUpdated)
 }
@@ -55,4 +65,10 @@ func main() {
 	fmt.Println(c2)
 	c2.Increment()
 	fmt.Println(c2)
+
+	var c3 Counter
+	doUpdateWrong(c3)
+	fmt.Println("in main:", c3)
+	doUpdateRight(&c3)
+	fmt.Println("in main:", c3)
 }
