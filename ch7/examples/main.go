@@ -47,6 +47,15 @@ func (c Counter) String() string {
 	return fmt.Sprintf("total: %d, last updated: %v", c.total, c.lastUpdated)
 }
 
+// methods are functions too
+type Adder struct {
+	start int
+}
+
+func (a Adder) AddTo(val int) int {
+	return a.start + val
+}
+
 func main() {
 
 	p := Person{
@@ -71,4 +80,7 @@ func main() {
 	fmt.Println("in main:", c3)
 	doUpdateRight(&c3)
 	fmt.Println("in main:", c3)
+
+	myAdder := Adder{start: 10}
+	fmt.Println(myAdder.AddTo(5))
 }
