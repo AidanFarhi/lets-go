@@ -56,6 +56,21 @@ func (a Adder) AddTo(val int) int {
 	return a.start + val
 }
 
+// you can declare types based on other types
+type HighScore Score
+type Employee Person
+
+// iotas
+type MailCategory int
+
+const (
+	Uncategorized MailCategory = iota
+	Personal
+	Spam
+	Social
+	Advertisements
+)
+
 func main() {
 
 	p := Person{
@@ -83,4 +98,23 @@ func main() {
 
 	myAdder := Adder{start: 10}
 	fmt.Println(myAdder.AddTo(5))
+	// method value
+	f1 := myAdder.AddTo
+	fmt.Println(f1(5))
+	// method expression
+	f2 := Adder.AddTo
+	fmt.Println(f2(Adder{start: 100}, 15))
+
+	// assigning untyped constants is valid
+	var i int = 300
+	var s Score = 100
+	var hs HighScore = 200
+	// hs = s
+	// s = i
+	s = Score(i)
+	hs = HighScore(s)
+	fmt.Println(hs)
+	var newScore Score = 50
+	scoreWithBonus := newScore + 100 // type of scoreWithBonus is Score
+	fmt.Println(scoreWithBonus)
 }
