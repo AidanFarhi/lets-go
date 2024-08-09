@@ -95,6 +95,7 @@ func (c Controller) SayHello(w http.ResponseWriter, r *http.Request) {
 		c.l.Log("error while handling userId: " + userId)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(`{"msg": "error handling request"}`))
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"msg": "` + msg + `"}`))
@@ -108,6 +109,7 @@ func (c Controller) SayGoodbye(w http.ResponseWriter, r *http.Request) {
 		c.l.Log("error while handling userId: " + userId)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(`{"msg": "error handling request"}`))
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`{"msg": "` + msg + `"}`))
