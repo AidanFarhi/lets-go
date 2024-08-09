@@ -3,126 +3,129 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 )
 
-// interfaces
-type DataStore interface {
-	UserNameForID(userId string) (string, bool)
-}
-
+// logging
 type Logger interface {
 	Log(message string)
 }
 
-type MessageService interface {
-	SayHello(userId string) (string, error)
-	SayGoodbye(userId string) (string, error)
-}
-
-// adapters
 type LoggerAdapter func(message string)
 
 func (la LoggerAdapter) Log(message string) {
 	la(message)
 }
 
-// implementations
-func LogOutput(message string) {
+func LogMessage(message string) {
 	fmt.Println(message)
 }
 
-type SimpleDataStore struct {
-	userData map[string]string
+// repository
+type UserRepository interface {
+	GetUserNameForId(userId string) (string, bool)
 }
 
-func (sds SimpleDataStore) UserNameForID(userId string) (string, bool) {
-	name, ok := sds.userData[userId]
-	return name, ok
+type SimpleUserRepository struct {
+	repo map[string]string
 }
 
-func NewSimpleDataStore() SimpleDataStore {
-	return SimpleDataStore{
-		userData: map[string]string{
+func (sur SimpleUserRepository) GetUserNameForId(userId string) (string, bool) {
+	userName, ok := sur.repo[userId]
+	if !ok {
+		return "", false
+	}
+	return userName, true
+}
+
+func NewSimpleRepository() SimpleUserRepository {
+	return SimpleUserRepository{
+		repo: map[string]string{
 			"1": "bob",
-			"2": "joe",
-			"3": "jim",
+			"2": "jim",
+			"3": "steve",
 		},
 	}
 }
 
+// service
+type MessageService interface {
+	SayHello(userId string) (string, error)
+	SayGoodbye(userId string) (string, error)
+}
+
 type SimpleMessageService struct {
-	l  Logger
-	ds DataStore
+	ur UserRepository
 }
 
-func (ms SimpleMessageService) SayHello(userId string) (string, error) {
-	ms.l.Log("in SayHello for " + userId)
-	name, ok := ms.ds.UserNameForID(userId)
+func (sms SimpleMessageService) SayHello(userId string) (string, error) {
+	userName, ok := sms.ur.GetUserNameForId(userId)
 	if !ok {
-		return "", errors.New("uknown user")
+		return "", errors.New("userId not found")
 	}
-	return "Hello, " + name, nil
+	return "Hello, " + userName, nil
 }
 
-func (ms SimpleMessageService) SayGoodbye(userId string) (string, error) {
-	ms.l.Log("in SayHello for " + userId)
-	name, ok := ms.ds.UserNameForID(userId)
+func (sms SimpleMessageService) SayGoodbye(userId string) (string, error) {
+	userName, ok := sms.ur.GetUserNameForId(userId)
 	if !ok {
-		return "", errors.New("uknown user")
+		return "", errors.New("userId not found")
 	}
-	return "Goodbye, " + name, nil
+	return "Goodbye, " + userName, nil
 }
 
-func NewSimpleMessageService(l Logger, ds DataStore) SimpleMessageService {
+func NewSimpleMessageService(ur UserRepository) SimpleMessageService {
 	return SimpleMessageService{
-		l:  l,
-		ds: ds,
+		ur: ur,
 	}
 }
 
+// controller
 type Controller struct {
-	l  Logger
-	ms MessageService
+	s MessageService
+	l Logger
 }
 
 func (c Controller) SayHello(w http.ResponseWriter, r *http.Request) {
-	c.l.Log("In Controller.SayHello")
-	userId := r.URL.Query().Get("user_id")
-	message, err := c.ms.SayHello(userId)
+	userId := r.URL.Query().Get("userId")
+	w.Header().Add("content-type", "application/json")
+	msg, err := c.s.SayHello(userId)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
+		c.l.Log("error while handling userId: " + userId)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"msg": "error handling request"}`))
 	}
-	w.Write([]byte(message))
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"msg": "` + msg + `"}`))
 }
 
 func (c Controller) SayGoodbye(w http.ResponseWriter, r *http.Request) {
-	c.l.Log("In Controller.SayGoodbye")
-	userId := r.URL.Query().Get("user_id")
-	message, err := c.ms.SayGoodbye(userId)
+	userId := r.URL.Query().Get("userId")
+	w.Header().Add("content-type", "application/json")
+	msg, err := c.s.SayGoodbye(userId)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
-		return
+		c.l.Log("error while handling userId: " + userId)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"msg": "error handling request"}`))
 	}
-	w.Write([]byte(message))
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"msg": "` + msg + `"}`))
 }
 
-func NewController(l Logger, ms MessageService) Controller {
+func NewController(s MessageService, l Logger) Controller {
 	return Controller{
-		l:  l,
-		ms: ms,
+		s: s,
+		l: l,
 	}
 }
 
 func main() {
-	logger := LoggerAdapter(LogOutput)
-	dataStore := NewSimpleDataStore()
-	messageService := NewSimpleMessageService(logger, dataStore)
-	controller := NewController(logger, messageService)
+	logger := LoggerAdapter(LogMessage)
+	repository := NewSimpleRepository()
+	service := NewSimpleMessageService(repository)
+	controller := NewController(service, logger)
 	http.HandleFunc("/hello", controller.SayHello)
 	http.HandleFunc("/goodbye", controller.SayGoodbye)
-	http.ListenAndServe(":8888", nil)
+	log.Fatal(http.ListenAndServe(":5555", nil))
 }
