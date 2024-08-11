@@ -1,0 +1,82 @@
+[
+    {
+        "teamName": "Manchester City",
+        "players": [
+            "Ederson",
+            "Kyle Walker",
+            "Ruben Dias",
+            "Aymeric Laporte",
+            "João Cancelo",
+            "Rodri",
+            "Kevin De Bruyne",
+            "Ilkay Gündogan",
+            "Bernardo Silva",
+            "Phil Foden",
+            "Erling Haaland"
+        ]
+    },
+    {
+        "teamName": "Real Madrid",
+        "players": [
+            "Thibaut Courtois",
+            "Dani Carvajal",
+            "Eder Militão",
+            "David Alaba",
+            "Ferland Mendy",
+            "Casemiro",
+            "Luka Modrić",
+            "Toni Kroos",
+            "Vinícius Júnior",
+            "Karim Benzema",
+            "Rodrygo"
+        ]
+    },
+    {
+        "teamName": "Paris Saint-Germain",
+        "players": [
+            "Gianluigi Donnarumma",
+            "Achraf Hakimi",
+            "Marquinhos",
+            "Sergio Ramos",
+            "Nuno Mendes",
+            "Marco Verratti",
+            "Vitinha",
+            "Carlos Soler",
+            "Kylian Mbappé",
+            "Lionel Messi",
+            "Neymar"
+        ]
+    },
+    {
+        "teamName": "Bayern Munich",
+        "players": [
+            "Manuel Neuer",
+            "Benjamin Pavard",
+            "Dayot Upamecano",
+            "Lucas Hernández",
+            "Alphonso Davies",
+            "Joshua Kimmich",
+            "Leon Goretzka",
+            "Jamal Musiala",
+            "Leroy Sané",
+            "Thomas Müller",
+            "Kingsley Coman"
+        ]
+    },
+    {
+        "teamName": "Barcelona",
+        "players": [
+            "Marc-André ter Stegen",
+            "Jules Koundé",
+            "Ronald Araújo",
+            "Andreas Christensen",
+            "Jordi Alba",
+            "Sergio Busquets",
+            "Frenkie de Jong",
+            "Pedri",
+            "Gavi",
+            "Robert Lewandowski",
+            "Raphinha"
+        ]
+    }
+]
