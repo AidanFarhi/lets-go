@@ -36,6 +36,23 @@ the values returned by Ranker to the io.Writer, with a newline separating
 each result. Call this function from main.
 */
 
+// interfaces
+type Ranker interface {
+	Ranking() []string
+}
+
+// funcs
+func RankPrinter(r Ranker, w io.Writer) error {
+	for _, rank := range r.Ranking() {
+		_, err := io.WriteString(w, rank+"\n")
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// structs
 type Team struct {
 	Name        string   `json:"teamName"`
 	PlayerNames []string `json:"players"`
@@ -46,7 +63,7 @@ type League struct {
 	Wins  map[string]int
 }
 
-func (l League) MatchResult(t1 string, t1Score int, t2 string, t2Score int) {
+func (l League) AddMatchResult(t1 string, t1Score int, t2 string, t2Score int) {
 	winner, err := l.GetWinner(t1, t1Score, t2, t2Score)
 	if err == nil {
 		wins, ok := l.Wins[winner]
@@ -119,11 +136,41 @@ func GenerateLeague() (League, error) {
 }
 
 func main() {
+
 	league, err := GenerateLeague()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	league.Wins["Real Madrid"] = 3
-	fmt.Println(league.Ranking())
+
+	league.AddMatchResult("Real Madrid", 3, "Barcelona", 2)
+	league.AddMatchResult("Bayern Munich", 1, "Barcelona", 2)
+	league.AddMatchResult("Paris Saint-Germain", 0, "Barcelona", 2)
+	league.AddMatchResult("Real Madrid", 1, "Manchester City", 5)
+	league.AddMatchResult("Barcelona", 1, "Real Madrid", 2)
+	league.AddMatchResult("Manchester City", 3, "Bayern Munich", 1)
+	league.AddMatchResult("Paris Saint-Germain", 2, "Real Madrid", 2)
+	league.AddMatchResult("Barcelona", 3, "Manchester City", 4)
+	league.AddMatchResult("Bayern Munich", 0, "Paris Saint-Germain", 3)
+	league.AddMatchResult("Real Madrid", 4, "Bayern Munich", 2)
+	league.AddMatchResult("Manchester City", 1, "Paris Saint-Germain", 1)
+	league.AddMatchResult("Barcelona", 2, "Bayern Munich", 0)
+	league.AddMatchResult("Real Madrid", 2, "Barcelona", 2)
+	league.AddMatchResult("Bayern Munich", 1, "Manchester City", 1)
+	league.AddMatchResult("Paris Saint-Germain", 3, "Real Madrid", 3)
+	league.AddMatchResult("Barcelona", 0, "Manchester City", 0)
+	league.AddMatchResult("Bayern Munich", 2, "Paris Saint-Germain", 2)
+	league.AddMatchResult("Manchester City", 1, "Real Madrid", 1)
+	league.AddMatchResult("Paris Saint-Germain", 0, "Barcelona", 0)
+	league.AddMatchResult("Bayern Munich", 3, "Real Madrid", 3)
+
+	RankPrinter(league, os.Stdout)
+
+	f, err := os.Create("ranking.txt")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	RankPrinter(league, f)
+	f.Close()
 }

@@ -1,0 +1,5 @@
+Real Madrid: 3
+Barcelona: 3
+Manchester City: 3
+Paris Saint-Germain: 1
+Bayern Munich: 0
