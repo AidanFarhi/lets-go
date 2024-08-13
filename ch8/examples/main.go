@@ -151,6 +151,28 @@ func Convert[T1, T2 Integer](in T1) T2 {
 	return T2(in)
 }
 
+type Thinger interface {
+	Thing()
+}
+
+type ThingerInt int
+
+func (t ThingerInt) Thing() {
+	fmt.Println("ThingIng:", t)
+}
+
+type ThingerSlice []int
+
+func (t ThingerSlice) Thing() {
+	fmt.Println("ThingSlice:", t)
+}
+
+func Comparer[T comparable](t1, t2 T) {
+	if t1 == t2 {
+		fmt.Println("equal!")
+	}
+}
+
 func main() {
 
 	var intStack Stack[int]
@@ -209,4 +231,23 @@ func main() {
 	var num1 int = 10
 	num2 := Convert[int, int64](num1)
 	fmt.Println(num2)
+
+	var a1 int = 10
+	var a2 int = 10
+	Comparer(a1, a2)
+
+	var a3 ThingerInt = 20
+	var a4 ThingerInt = 20
+	Comparer(a3, a4)
+
+	var a5 ThingerSlice = []int{1, 2, 3}
+	var a6 ThingerSlice = []int{1, 2, 3}
+	// this will not compile
+	// Comparer(a5, a6)
+
+	var a7 Thinger = a5
+	var a8 Thinger = a6
+	// this will compile, but panic at runtime
+	// Comparer(a7, a8)
+	fmt.Println(a7, a8)
 }
