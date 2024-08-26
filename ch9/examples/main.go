@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/zip"
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -22,6 +24,40 @@ func DoubleEven(i int) (int, error) {
 	return i * 2, nil
 }
 
+// including additional information with errors
+type Status int
+
+const (
+	InvalidLogin Status = iota + 1
+	NotFound
+)
+
+type StatusErr struct {
+	Status  Status
+	Message string
+}
+
+func (se StatusErr) Error() string {
+	return se.Message
+}
+
+// dummy login function
+func login(uid, pwd string) (string, error) {
+	return "", errors.New("error logging in")
+}
+
+// using StatusErr to provide more details about what went wrong
+func TryLogin(uid, pwd, file string) ([]byte, error) {
+	token, err := login(uid, pwd)
+	if err != nil {
+		return nil, StatusErr{
+			Status:  InvalidLogin,
+			Message: fmt.Sprintf("invalid credentials for user %s", uid),
+		}
+	}
+	return []byte(token), nil
+}
+
 func main() {
 
 	x := 20
@@ -38,4 +74,12 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(res)
+
+	// sentinal errors
+	data := []byte("this is not a zip file")
+	notAZipFile := bytes.NewReader(data)
+	_, err = zip.NewReader(notAZipFile, int64(len(data)))
+	if err == zip.ErrFormat {
+		fmt.Println("not a zip file")
+	}
 }
