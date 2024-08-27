@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 )
 
 // you can use errors.New() to create a new error from a string
@@ -119,6 +120,45 @@ func ValidatePerson(p Person) error {
 	return nil
 }
 
+// defining the errors.Is method on a custom error
+type MyErr struct {
+	Codes []int
+}
+
+func (me MyErr) Error() string {
+	return fmt.Sprintf("codes: %v", me.Codes)
+}
+
+func (me MyErr) Is(target error) bool {
+	if me2, ok := target.(MyErr); ok {
+		return slices.Equal(me.Codes, me2.Codes)
+	}
+	return false
+}
+
+// pattern matching errors
+type ResourceErr struct {
+	Resource string
+	Code     int
+}
+
+func (re ResourceErr) Error() string {
+	return fmt.Sprintf("%s: %d", re.Resource, re.Code)
+}
+
+func (re ResourceErr) Is(target error) bool {
+	if other, ok := target.(ResourceErr); ok {
+		ignoreResource := other.Resource == ""
+		ignoreCode := other.Code == 0
+		matchResource := other.Resource == re.Resource
+		matchCode := other.Code == re.Code
+		return matchResource && matchCode ||
+			matchResource && ignoreCode ||
+			ignoreResource && matchCode
+	}
+	return false
+}
+
 func main() {
 
 	x := 20
@@ -180,5 +220,31 @@ func main() {
 		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
 			fmt.Println(wrappedErr)
 		}
+	}
+
+	// errors.Is
+	err = fileChecker("does_not_exist.txt")
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			fmt.Println("file does not exist")
+		}
+	}
+
+	err = ResourceErr{Resource: "Database", Code: 500}
+	if errors.Is(err, ResourceErr{Resource: "Database"}) {
+		fmt.Println("the database is broken")
+	}
+
+	var resourceErr ResourceErr
+	if errors.As(err, &resourceErr) {
+		fmt.Println(resourceErr.Code)
+	}
+
+	var resErr interface {
+		Resource() string
+		Code() int
+	}
+	if errors.As(err, &resErr) {
+		fmt.Println(resErr.Code())
 	}
 }
