@@ -35,10 +35,15 @@ const (
 type StatusErr struct {
 	Status  Status
 	Message string
+	Err     error
 }
 
 func (se StatusErr) Error() string {
 	return se.Message
+}
+
+func (se StatusErr) Unwrap() error {
+	return se.Err
 }
 
 // dummy login function
@@ -53,9 +58,65 @@ func TryLogin(uid, pwd, file string) ([]byte, error) {
 		return nil, StatusErr{
 			Status:  InvalidLogin,
 			Message: fmt.Sprintf("invalid credentials for user %s", uid),
+			Err:     err,
 		}
 	}
 	return []byte(token), nil
+}
+
+// incorrect usage of custom error
+func GenerateErrorBroken(flag bool) error {
+	var genErr StatusErr
+	if flag {
+		genErr = StatusErr{
+			Status: NotFound,
+		}
+	}
+	return genErr
+}
+
+// correct usage
+func GenerateErrorFixed(flag bool) error {
+	if flag {
+		return StatusErr{
+			Status: NotFound,
+		}
+	}
+	return nil
+}
+
+// wrapping errors
+func fileChecker(name string) error {
+	f, err := os.Open(name)
+	if err != nil {
+		return fmt.Errorf("in fileChecker: %w", err)
+	}
+	f.Close()
+	return nil
+}
+
+type Person struct {
+	FirstName string
+	LastName  string
+	Age       int
+}
+
+// merging multiple errors
+func ValidatePerson(p Person) error {
+	var errs []error
+	if len(p.FirstName) == 0 {
+		errs = append(errs, errors.New("field FirstName cannot be empty"))
+	}
+	if len(p.LastName) == 0 {
+		errs = append(errs, errors.New("field LastName cannot be empty"))
+	}
+	if p.Age < 0 {
+		errs = append(errs, errors.New("field Age cannot be negative"))
+	}
+	if len(errs) > 0 {
+		return errors.Join(errs...)
+	}
+	return nil
 }
 
 func main() {
@@ -81,5 +142,43 @@ func main() {
 	_, err = zip.NewReader(notAZipFile, int64(len(data)))
 	if err == zip.ErrFormat {
 		fmt.Println("not a zip file")
+	}
+
+	// For an interface to be considered nil, both the underlying type
+	// and the underlying value must be nil. The underlying type of
+	// these return values are not nil.
+	err = GenerateErrorBroken(true)
+	fmt.Println("GenerateErrorBroken(true) returns non-nil error:", err != nil)
+	err = GenerateErrorBroken(false)
+	fmt.Println("GenerateErrorBroken(false) returns non-nil error:", err != nil)
+
+	err = GenerateErrorFixed(true)
+	fmt.Println("GenerateErrorFixed(true) returns non-nil error:", err != nil)
+	err = GenerateErrorFixed(false)
+	fmt.Println("GenerateErrorFixed(false) returns non-nil error:", err != nil)
+
+	err = fileChecker("not_here.txt")
+	if err != nil {
+		fmt.Println(err)
+		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
+			fmt.Println(wrappedErr)
+		}
+	}
+
+	_, err = TryLogin("yolo", "pwd", "not_here.txt")
+	if err != nil {
+		fmt.Println(err)
+		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
+			fmt.Println(wrappedErr)
+		}
+	}
+
+	p := Person{Age: -1}
+	err = ValidatePerson(p)
+	if err != nil {
+		fmt.Println(err)
+		if wrappedErr := errors.Unwrap(err); wrappedErr != nil {
+			fmt.Println(wrappedErr)
+		}
 	}
 }
