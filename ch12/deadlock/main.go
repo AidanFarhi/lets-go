@@ -19,7 +19,7 @@ func main() {
 	// every write to an unbuffered channel will cause
 	// the writing goroutine to pause until another
 	// goroutine reads from the same channel.
-	// this goroutine cannot proceed until ch1 is read
+	// this goroutine cannot proceed until ch2 is read
 	ch2 <- inMain
 	fromGoroutine := <-ch1
 	fmt.Println("main:", inMain, fromGoroutine)
