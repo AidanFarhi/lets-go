@@ -18,8 +18,10 @@ func main() {
 	wg.Add(nProc)
 	for i := 0; i < nProc; i++ {
 		go func() {
+			// this ensures that wg.Done() is called even
+			// if process() causes a panic
+			defer wg.Done()
 			process(i)
-			wg.Done()
 		}()
 	}
 	wg.Wait()
