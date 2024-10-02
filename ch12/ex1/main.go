@@ -13,10 +13,9 @@ them out. The function should exit when all values have been printed out.
 Make sure that none of the goroutines leak. You can create additional
 goroutines if needed.
 */
-
 func process() {
 	var wg sync.WaitGroup
-	wg.Add(21)
+	wg.Add(2)
 	ch := make(chan int)
 	go func() {
 		defer wg.Done()
@@ -31,13 +30,18 @@ func process() {
 		}
 	}()
 	go func() {
-		defer wg.Done()
-		defer close(ch)
+		wg.Wait()
+		close(ch)
+	}()
+	var wg2 sync.WaitGroup
+	wg2.Add(1)
+	go func() {
+		defer wg2.Done()
 		for n := range ch {
 			fmt.Println(n)
 		}
 	}()
-	wg.Wait()
+	wg2.Wait()
 }
 
 func main() {
