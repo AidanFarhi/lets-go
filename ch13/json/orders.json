@@ -1,0 +1,29 @@
+[
+    {
+        "id": "76432",
+        "date_ordered": "2021-07-15T10:23:45Z",
+        "customer_id": "12",
+        "items": [
+            {"id": "mno456", "name": "Widget A"},
+            {"id": "qrs789", "name": "Gadget B"}
+        ]
+    },
+    {
+        "id": "98213",
+        "date_ordered": "2023-03-22T16:18:30Z",
+        "customer_id": "24",
+        "items": [
+            {"id": "abc345", "name": "Tool C"},
+            {"id": "def678", "name": "Device D"}
+        ]
+    },
+    {
+        "id": "54126",
+        "date_ordered": "2022-11-05T08:45:12Z",
+        "customer_id": "37",
+        "items": [
+            {"id": "ghk123", "name": "Appliance E"},
+            {"id": "ijk456", "name": "Instrument F"}
+        ]
+    }
+]
