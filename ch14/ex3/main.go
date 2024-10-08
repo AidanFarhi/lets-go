@@ -40,6 +40,5 @@ func main() {
 	ctx := SetLogLevel(context.Background(), Debug)
 	Log(ctx, Debug, "debug")
 	Log(ctx, Info, "info")
-	Log(ctx, Warn, "warn")
 	// ctx = SetLogLevel(ctx, Warn)
 }
