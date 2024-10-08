@@ -10,9 +10,13 @@ type Level string
 const Debug Level = "debug"
 const Info Level = "info"
 
+type logLevelKey int
+
+const key logLevelKey = 1
+
 func Log(ctx context.Context, level Level, message string) {
 	var inLevel Level
-	// TODO get a logging level out of the context and assign it to inLevel
+	inLevel = GetLogLevel(ctx)
 	if level == Debug && inLevel == Debug {
 		fmt.Println(message)
 	}
@@ -22,13 +26,20 @@ func Log(ctx context.Context, level Level, message string) {
 }
 
 func SetLogLevel(ctx context.Context, logLevel Level) context.Context {
-	return context.WithValue(ctx, "logLevel", logLevel)
+	return context.WithValue(ctx, key, logLevel)
 }
 
 func GetLogLevel(ctx context.Context) Level {
-	return ctx.Value("loglevel").(Level)
+	if ctx == nil {
+		fmt.Println("ctx is nil")
+	}
+	return ctx.Value(key).(Level)
 }
 
 func main() {
-
+	ctx := SetLogLevel(context.Background(), Debug)
+	Log(ctx, Debug, "debug")
+	Log(ctx, Info, "info")
+	Log(ctx, Warn, "warn")
+	// ctx = SetLogLevel(ctx, Warn)
 }
